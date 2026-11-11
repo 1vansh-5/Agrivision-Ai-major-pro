@@ -28,13 +28,35 @@ Rules: use the vetted practices for cure steps when they exist. If none exist, g
 Never invent chemical names or doses: say "as per label, on KVK advice". Use the weather to time actions (no spraying before rain; humid spells favour fungus).
 Keep each item to one short sentence. Be honest about uncertainty. Write ALL text in the requested language.`;
 
-async function groq(model, messages) {
+async function groq(stage, model, messages, trace) {
+  const t0 = Date.now();
   const r = await fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${KEY}` },
     body: JSON.stringify({ model, messages, temperature: 0.2, max_tokens: 1200, response_format: { type: "json_object" } }),
   });
-  if (!r.ok) throw new Error(`Groq ${r.status}: ${(await r.text()).slice(0, 200)}`);
-  return JSON.parse((await r.json()).choices[0].message.content);
+  if (!r.ok) { trace.push({ stage, model, ms: Date.now() - t0, ok: false }); throw new Error(`Groq ${r.status}: ${(await r.text()).slice(0, 200)}`); }
+  const j = await r.json();
+  trace.push({ stage, model, ms: Date.now() - t0, tokens: j.usage?.total_tokens, ok: true });
+  return JSON.parse(j.choices[0].message.content);
+}
+
+// Supervisor agent: audits every Groq output before it reaches the farmer
+const DOSE = /\b\d+(\.\d+)?\s?(mg|ml|g|gm|kg|l|litre|liter|ppm|%)(\s?\/\s?(l|ha|acre|litre|liter))?/i;
+function verify(seen, plan, vetted, wx) {
+  const checks = [], add = (ok, text) => checks.push({ ok, text });
+  const known = KB.some(e => e.c.some(x => String(seen.crop).toLowerCase().includes(x)));
+  add(known, known ? "Crop is in the Bihar and Jharkhand knowledge base" : "Crop not in knowledge base, advice is general");
+  add(vetted.length > 0, vetted.length ? "Cure follows a vetted entry" : "No vetted entry matched this condition");
+  let stripped = 0;
+  for (const k of ["cure", "prevention", "quality_tips"]) {
+    plan[k] = (Array.isArray(plan[k]) ? plan[k] : []).map(x => DOSE.test(String(x)) ? (stripped++, "Use the product and dose as per label, on KVK advice.") : String(x));
+  }
+  add(stripped === 0, stripped ? `Replaced ${stripped} unverified dose(s) with label advice` : "No unverified chemical doses");
+  add(plan.cure.length > 0 && !!plan.summary, plan.cure.length ? "Complete plan returned" : "Plan incomplete");
+  add(!!wx, wx ? "Live weather used" : "No location, weather skipped");
+  const c = +seen.confidence || 0;
+  add(c >= 60, c >= 60 ? `Confidence ${c}%` : `Low confidence (${c}%), expert check advised`);
+  return checks;
 }
 
 function lookup(crop, condition) {
@@ -61,20 +83,24 @@ app.post("/api/diagnose", async (req, res) => {
     const language = lang === "hi" ? "Hindi" : "English";
 
     // 1. Perceive: identify crop and condition from the photo
-    const seen = await groq(VISION, [{ role: "system", content: SEE }, { role: "user", content: [
-      { type: "image_url", image_url: { url: image } }, { type: "text", text: "Identify this crop and its condition." }] }]);
+    const trace = [];
+    const seen = await groq("Vision: identify crop", VISION, [{ role: "system", content: SEE }, { role: "user", content: [
+      { type: "image_url", image_url: { url: image } }, { type: "text", text: "Identify this crop and its condition." }] }], trace);
 
     // 2. Retrieve: vetted practices and live weather
     const used = ["lookup_practices"], vetted = lookup(seen.crop, seen.condition);
+    trace.push({ stage: "Retrieve: practices", model: `${vetted.length} entries matched`, ms: 0, ok: true });
     let wx = null;
-    if (typeof lat === "number" && typeof lon === "number") { try { wx = await weather(lat, lon); used.push("get_weather"); } catch {} }
+    if (typeof lat === "number" && typeof lon === "number") { const t0 = Date.now(); try { wx = await weather(lat, lon); used.push("get_weather"); trace.push({ stage: "Retrieve: live weather", model: "open-meteo", ms: Date.now() - t0, ok: true }); } catch {} }
 
     // 3. Advise: write the plan from the retrieved facts only
-    const plan = await groq(TEXT, [{ role: "system", content: ADVISE }, { role: "user", content:
-      `Language: ${language}\nDiagnosis: ${JSON.stringify(seen)}\nVetted practices: ${JSON.stringify(vetted)}\nWeather: ${JSON.stringify(wx)}` }]);
+    const plan = await groq("Advice: write plan", TEXT, [{ role: "system", content: ADVISE }, { role: "user", content:
+      `Language: ${language}\nDiagnosis: ${JSON.stringify(seen)}\nVetted practices: ${JSON.stringify(vetted)}\nWeather: ${JSON.stringify(wx)}` }], trace);
 
     const low = seen.crop === "unknown" || (+seen.confidence || 0) < 60;
-    res.json({ ...seen, ...plan, see_expert: plan.see_expert || low, tools_used: used });
+    const checks = verify(seen, plan, vetted, wx);
+    trace.push({ stage: "Verify: safety checks", model: `${checks.filter(c => c.ok).length}/${checks.length} passed`, ms: 0, ok: true });
+    res.json({ ...seen, ...plan, see_expert: plan.see_expert || low || checks.some(c => !c.ok && /dose|incomplete/i.test(c.text)), tools_used: used, trace, checks });
   } catch (e) {
     console.error(e);
     res.status(500).json({ error: "Diagnosis failed. Please try again." });
