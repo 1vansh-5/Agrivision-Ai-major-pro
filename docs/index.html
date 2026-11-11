@@ -72,16 +72,16 @@ button:focus-visible,label:focus-within{outline:3px solid #fff;outline-offset:2p
       <video id="video" playsinline muted></video>
       <img id="shot" alt="Captured plant" hidden>
       <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
-      <div class="hint" id="hint">Starting camera…</div>
+      <div class="hint" id="hint">Choose how to add a photo</div>
     </div>
     <div class="meter" id="meter"><i></i></div>
     <div class="small" style="color:#cfe3d6" id="qtext">Checking light and focus</div>
     <div class="row">
-      <button class="btn" id="snap" disabled>Scan plant</button>
+      <button class="btn" id="openCam">Open camera</button>
+      <button class="btn" id="snap" disabled hidden>Scan plant</button>
       <button class="btn ghost" id="retake" hidden>Scan again</button>
       <button class="btn ghost" id="torch" hidden>Light</button>
-      <label class="btn ghost" style="cursor:pointer">Upload photo<input type="file" id="file" accept="image/*" hidden></label>
-      <label class="auto"><input type="checkbox" id="auto" checked> Auto-capture</label>
+      <label class="btn ghost" style="cursor:pointer"><span id="uplT">Choose from gallery</span><input type="file" id="file" accept="image/*" hidden></label>
     </div>
   </section>
 
@@ -103,17 +103,17 @@ const API=window.AGRI_API||"";
 const $ = id => document.getElementById(id);
 const T = {
   en:{title:"Point at a leaf or fruit. Get the fix.",lead:"AgriVision checks the photo, today's weather at your field, and trusted farming guidance, then tells you what to do.",tipsT:"For a clear scan",tips:["Fill the frame with one leaf or fruit","Use daylight, avoid harsh shadow","Hold still until the corners turn green"],
-    scan:"Scan plant",again:"Scan again",load:"Reading the photo and checking live weather…",start:"Starting camera…",
+    scan:"Scan plant",again:"Scan again",load:"Reading the photo and checking live weather…",start:"Starting camera…",open:"Open camera",choose:"Choose how to add a photo",
     dark:"Too dark. Move into light",bright:"Too bright. Shade the plant",blur:"Hold steady to focus",good:"Sharp and well lit. Ready",
     cure:"What to do now",prev:"Prevent it next time",qual:"For healthier, richer produce",live:"Live field check",conf:"Confidence",
     exp:"Low certainty. Show this plant to your local Krishi Vigyan Kendra (KVK) before spraying anything.",
-    nocam:"Camera unavailable. Use Upload photo.",err:"Something went wrong",detected:"Detected crop",maybe:"Could also be",print:"Save report as PDF",hist:"Recent scans",agent:"Agent activity and safety checks"},
+    nocam:"Camera unavailable. Use Choose from gallery.",upl:"Choose from gallery",badimg:"This image can't be read. Choose a JPEG or PNG photo.",err:"Something went wrong",detected:"Detected crop",maybe:"Could also be",print:"Save report as PDF",hist:"Recent scans",agent:"Agent activity and safety checks"},
   hi:{title:"पत्ते या फल की ओर कैमरा करें। इलाज पाएँ।",lead:"AgriVision फोटो, आपके खेत का आज का मौसम और भरोसेमंद कृषि सलाह देखकर बताता है कि क्या करना है।",tipsT:"साफ स्कैन के लिए",tips:["फ्रेम में एक पत्ता या फल रखें","दिन की रोशनी में लें, तेज़ छाया से बचें","कोने हरे होने तक स्थिर रखें"],
-    scan:"पौधा स्कैन करें",again:"फिर स्कैन करें",load:"फोटो और लाइव मौसम जाँच रहे हैं…",start:"कैमरा चालू हो रहा है…",
+    scan:"पौधा स्कैन करें",again:"फिर स्कैन करें",load:"फोटो और लाइव मौसम जाँच रहे हैं…",start:"कैमरा चालू हो रहा है…",open:"कैमरा खोलें",choose:"फोटो जोड़ने का तरीका चुनें",
     dark:"बहुत अंधेरा है। रोशनी में जाएँ",bright:"बहुत तेज़ रोशनी है। पौधे पर छाया करें",blur:"फोकस के लिए स्थिर रखें",good:"साफ और अच्छी रोशनी। तैयार",
     cure:"अभी क्या करें",prev:"आगे से बचाव",qual:"स्वस्थ और बेहतर उपज के लिए",live:"खेत की लाइव जाँच",conf:"विश्वास",
     exp:"पक्का नहीं है। कुछ भी छिड़कने से पहले अपने नज़दीकी कृषि विज्ञान केंद्र (KVK) को दिखाएँ।",
-    nocam:"कैमरा उपलब्ध नहीं। फोटो अपलोड करें।",err:"कुछ गड़बड़ हुई",detected:"पहचानी गई फसल",maybe:"यह भी हो सकती है",print:"रिपोर्ट PDF में सहेजें",hist:"हाल के स्कैन",agent:"एजेंट गतिविधि और सुरक्षा जाँच"}
+    nocam:"कैमरा उपलब्ध नहीं। गैलरी से फोटो चुनें।",upl:"गैलरी से फोटो चुनें",badimg:"यह फोटो पढ़ी नहीं जा सकी। JPEG या PNG फोटो चुनें।",err:"कुछ गड़बड़ हुई",detected:"पहचानी गई फसल",maybe:"यह भी हो सकती है",print:"रिपोर्ट PDF में सहेजें",hist:"हाल के स्कैन",agent:"एजेंट गतिविधि और सुरक्षा जाँच"}
 };
 let lang="en", stream, track, torchOn=false, okFrames=0, busy=false, pos=null;
 
@@ -122,7 +122,7 @@ function setLang(l){
   $("en").setAttribute("aria-pressed",l==="en"); $("hi").setAttribute("aria-pressed",l==="hi");
   $("title").textContent=t.title; $("lead").textContent=t.lead; $("tipsT").textContent=t.tipsT;
   $("tips").replaceChildren(...t.tips.map(x=>Object.assign(document.createElement("li"),{textContent:x})));
-  $("snap").textContent=t.scan; $("retake").textContent=t.again; $("loadT").textContent=t.load;
+  $("snap").textContent=t.scan; $("openCam").textContent=t.open; if(!stream)$("hint").textContent=t.choose; $("uplT").textContent=t.upl; $("retake").textContent=t.again; $("loadT").textContent=t.load;
 }
 $("en").onclick=()=>setLang("en"); $("hi").onclick=()=>setLang("hi");
 
@@ -138,7 +138,7 @@ async function startCam(){
     const caps=track.getCapabilities?.()||{};
     try{ if(caps.focusMode?.includes("continuous")) await track.applyConstraints({advanced:[{focusMode:"continuous"}]}); }catch{}
     if(caps.torch) $("torch").hidden=false;
-    $("hint").textContent=""; setInterval(analyse,250);
+    $("hint").textContent=""; $("openCam").hidden=true; $("snap").hidden=false; setInterval(analyse,250);
   }catch{ $("hint").textContent=T[lang].nocam; }
 }
 $("torch").onclick=async()=>{torchOn=!torchOn; try{await track.applyConstraints({advanced:[{torch:torchOn}]})}catch{}};
@@ -159,8 +159,6 @@ function analyse(){
   $("meter").firstElementChild.style.width=score+"%";
   $("qtext").textContent= mean<=55?t.dark: mean>=215?t.bright: !sharpOk?t.blur: t.good;
   $("snap").disabled=!ok;
-  okFrames= ok? okFrames+1 : 0;
-  if(ok&&$("auto").checked&&okFrames>=6){ okFrames=0; capture(); }   // ~1.5 s steady
 }
 
 // Capture at max 1280px, JPEG
@@ -175,14 +173,16 @@ $("file").onchange=e=>{
   const f=e.target.files[0]; if(!f) return; const img=new Image();
   img.onload=()=>{const k=Math.min(1,1280/Math.max(img.width,img.height)),c=document.createElement("canvas");
     c.width=img.width*k;c.height=img.height*k;c.getContext("2d").drawImage(img,0,0,c.width,c.height);submit(c.toDataURL("image/jpeg",.85));};
-  img.src=URL.createObjectURL(f);
+  img.onerror=()=>renderError(T[lang].badimg);
+  img.src=URL.createObjectURL(f); e.target.value=""; // lets the same photo be chosen again
 };
-$("retake").onclick=()=>{ $("shot").hidden=true; $("video").hidden=false; $("retake").hidden=true; $("snap").hidden=false; busy=false; $("result").classList.remove("on"); $("empty").hidden=false; };
+$("retake").onclick=()=>{ $("shot").hidden=true; $("retake").hidden=true; busy=false; $("result").classList.remove("on"); $("empty").hidden=false;
+  if(stream){ $("video").hidden=false; $("snap").hidden=false; } else { $("openCam").hidden=false; $("hint").textContent=T[lang].choose; } };
 
 // Send to agent
 async function submit(dataUrl){
   busy=true; $("shot").src=dataUrl; $("shot").hidden=false; $("video").hidden=true;
-  $("snap").hidden=true; $("retake").hidden=false; $("empty").hidden=true;
+  $("snap").hidden=true; $("openCam").hidden=true; $("retake").hidden=false; $("empty").hidden=true;
   $("result").classList.remove("on"); $("loading").classList.add("on");
   try{
     const r=await fetch(API+"/api/diagnose",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({image:dataUrl,lang,...(pos||{})})});
@@ -217,7 +217,8 @@ function showHistory(){try{const a=JSON.parse(localStorage.getItem("agri_hist")|
 function renderError(m){ $("result").replaceChildren(h("div",{className:"warn",textContent:m})); $("result").classList.add("on"); }
 
 fetch(API+"/api/health").catch(()=>{}); // wakes a sleeping free-tier server
-setLang("en"); startCam(); showHistory();
+$("openCam").onclick=startCam;
+setLang("en"); showHistory();
 </script>
 </body>
 </html>
