@@ -4,7 +4,8 @@ import fs from "fs";
 import { runAgent, agentLimited } from "./agent.js";
 
 const app = express();
-const origins = (process.env.ALLOWED_ORIGIN || "*").split(",").map(s => s.trim());
+app.set("trust proxy", 1); // on Render, count each visitor separately instead of the proxy as one IP
+const origins = (process.env.ALLOWED_ORIGIN || "*").split(",").map(s => s.trim().replace(/\/+$/, "")); // tolerate a trailing slash
 app.use(cors({ origin: origins.includes("*") ? true : origins }));
 app.use(express.json({ limit: "8mb" }));
 app.use(express.static("docs")); // optional: serve the frontend from the same server
@@ -73,7 +74,7 @@ async function weather(lat, lon) {
 const hits = new Map(); // 20 scans per hour per IP, protects your key
 const limited = ip => { const now = Date.now(), a = (hits.get(ip) || []).filter(t => now - t < 3.6e6); a.push(now); hits.set(ip, a); return a.length > 20; };
 
-app.get("/api/health", (_, res) => res.json({ ok: true, vision: VISION, text: TEXT, crops_in_kb: new Set(KB.flatMap(e => e.c)).size }));
+app.get("/api/health", (_, res) => res.json({ ok: true, vision: VISION, text: TEXT, kb_entries: KB.length }));
 
 app.post("/api/diagnose", async (req, res) => {
   try {
