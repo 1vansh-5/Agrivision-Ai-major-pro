@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import fs from "fs";
+import { runAgent, agentLimited } from "./agent.js";
 
 const app = express();
 const origins = (process.env.ALLOWED_ORIGIN || "*").split(",").map(s => s.trim());
@@ -104,6 +105,20 @@ app.post("/api/diagnose", async (req, res) => {
   } catch (e) {
     console.error(e);
     res.status(500).json({ error: "Diagnosis failed. Please try again." });
+  }
+});
+
+// Live agent: chat with tools over the knowledge base, weather and the latest scan
+app.post("/api/agent", async (req, res) => {
+  try {
+    if (!KEY) return res.status(500).json({ error: "Server has no GROQ_API_KEY set." });
+    if (agentLimited(req.ip)) return res.status(429).json({ error: "Too many messages. Try again in an hour." });
+    const { messages, scan = null, lat, lon, lang = "en" } = req.body;
+    if (!Array.isArray(messages) || !messages.length || messages.length > 40) return res.status(400).json({ error: "Send a short message list." });
+    res.json(await runAgent({ messages, scan, lat, lon, lang }));
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: "The agent is unavailable. Please try again." });
   }
 });
 
