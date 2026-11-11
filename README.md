@@ -8,7 +8,7 @@ Photo of any crop or leaf -> crop detected -> diagnosis -> cure, with live weath
 - knowledge.json  vetted practices (edit and verify with a KVK or agronomy faculty)
 
 ## Run locally
-1. cp .env.example .env   and set GROQ_API_KEY
+1. cp .env.example .env   and set GROQ_API_KEY (models: see console.groq.com/docs/models)
 2. npm install
 3. node --env-file=.env server.js
 4. open http://localhost:3000  (camera on phones needs HTTPS, use ngrok or deploy)
