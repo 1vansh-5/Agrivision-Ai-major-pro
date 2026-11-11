@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="theme-color" content="#10382b">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AgriVision</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,7 +28,7 @@ main{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(
 .bl{bottom:14px;left:14px;border-right:0;border-top:0}.br{bottom:14px;right:14px;border-left:0;border-top:0}
 .hint{position:absolute;left:0;right:0;bottom:14px;text-align:center;color:#fff;font-weight:500;text-shadow:0 1px 6px #000}
 .meter{height:6px;background:#ffffff26;border-radius:9px;margin:12px 2px 4px;overflow:hidden}
-.meter i{display:block;height:100%;width:0;background:var(--marigold);transition:width .2s,background .2s}
+.meter i{display:block;height:100%;width:0;background:var(--marigold);transition:width .6s ease,background .4s}
 .meter.ok i{background:#6fe39a}
 .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center}
 button.btn{font:600 1rem Hind;border:0;border-radius:99px;padding:12px 22px;cursor:pointer;background:var(--marigold);color:#2b1c00}
@@ -56,7 +57,23 @@ button:focus-visible,label:focus-within{outline:3px solid #fff;outline-offset:2p
 .warn{background:#fbe9e6;border-left:5px solid var(--alert);padding:10px 14px;border-radius:6px;margin-top:12px;font-weight:500}
 .live{background:#e1ecf2;border-radius:10px;padding:10px 14px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-@media print{.finder,header,.empty,.btn{display:none!important}main{display:block}}
+@media print{#chat,.finder,header,.empty,.btn{display:none!important}main{display:block}}
+.chatbox{margin-top:28px;border-top:2px solid var(--bottle);padding-top:16px}
+.chatbox h3{font-size:1.4rem;color:var(--bottle)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.chip{font:500 .9rem Hind;border:1px solid var(--bottle);background:none;color:var(--bottle);border-radius:99px;padding:4px 12px;cursor:pointer}
+.chatlog{max-height:340px;overflow:auto;display:flex;flex-direction:column;gap:8px}
+.msg{padding:9px 13px;border-radius:14px;max-width:92%;white-space:pre-wrap}
+.msg.user{align-self:flex-end;background:var(--bottle);color:#fff}
+.msg.bot{align-self:flex-start;background:#fff;border:1px solid var(--line)}
+.chatrow{display:flex;gap:8px;margin-top:10px}
+.chatrow input{flex:1;min-width:0;font:inherit;padding:10px 14px;border:1px solid var(--line);border-radius:99px;background:#fff}
+html{scrollbar-gutter:stable;-webkit-text-size-adjust:100%}
+body{overflow-wrap:anywhere}
+button,label.btn{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.qline{min-height:3.1em;margin:6px 2px 0;color:#e8f3ec;font-weight:500;font-size:1rem;line-height:1.45}
+.view{max-height:60vh}
+@media(max-width:820px){.finder{position:static}.row .btn{flex:1 1 140px;text-align:center}.panel h2{font-size:1.7rem}}
 </style>
 </head>
 <body>
@@ -75,7 +92,7 @@ button:focus-visible,label:focus-within{outline:3px solid #fff;outline-offset:2p
       <div class="hint" id="hint">Choose how to add a photo</div>
     </div>
     <div class="meter" id="meter"><i></i></div>
-    <div class="small" style="color:#cfe3d6" id="qtext">Checking light and focus</div>
+    <div class="qline" id="qtext" role="status"></div>
     <div class="row">
       <button class="btn" id="openCam">Open camera</button>
       <button class="btn" id="snap" disabled hidden>Scan plant</button>
@@ -94,6 +111,12 @@ button:focus-visible,label:focus-within{outline:3px solid #fff;outline-offset:2p
     </div>
     <div class="loading" id="loading"><span></span><b id="loadT">Reading the photo and checking live weather…</b></div>
     <div class="result" id="result"></div>
+    <div id="chat" class="chatbox">
+      <h3 id="chatT">Ask the AgriVision agent</h3>
+      <div id="chips" class="chips"></div>
+      <div id="chatlog" class="chatlog" aria-live="polite"></div>
+      <div class="chatrow"><input id="chatin" type="text" maxlength="300" autocomplete="off"><button class="btn" id="send">Send</button></div>
+    </div>
   </section>
 </main>
 
@@ -107,22 +130,24 @@ const T = {
     dark:"Too dark. Move into light",bright:"Too bright. Shade the plant",blur:"Hold steady to focus",good:"Sharp and well lit. Ready",
     cure:"What to do now",prev:"Prevent it next time",qual:"For healthier, richer produce",live:"Live field check",conf:"Confidence",
     exp:"Low certainty. Show this plant to your local Krishi Vigyan Kendra (KVK) before spraying anything.",
-    nocam:"Camera unavailable. Use Choose from gallery.",upl:"Choose from gallery",badimg:"This image can't be read. Choose a JPEG or PNG photo.",err:"Something went wrong",detected:"Detected crop",maybe:"Could also be",print:"Save report as PDF",hist:"Recent scans",agent:"Agent activity and safety checks"},
+    nocam:"Camera unavailable. Use Choose from gallery.",upl:"Choose from gallery",badimg:"This image can't be read. Choose a JPEG or PNG photo.",err:"Something went wrong",detected:"Detected crop",maybe:"Could also be",print:"Save report as PDF",hist:"Recent scans",chat:"Ask the AgriVision agent",ph:"Ask about your crop, spraying, weather…",send:"Send",used:"Agent used",think:"Agent is checking…",chips:["What causes this?","Is it safe to spray today?","How do I prevent it next season?","Which crops do you cover?"],agent:"Agent activity and safety checks"},
   hi:{title:"पत्ते या फल की ओर कैमरा करें। इलाज पाएँ।",lead:"AgriVision फोटो, आपके खेत का आज का मौसम और भरोसेमंद कृषि सलाह देखकर बताता है कि क्या करना है।",tipsT:"साफ स्कैन के लिए",tips:["फ्रेम में एक पत्ता या फल रखें","दिन की रोशनी में लें, तेज़ छाया से बचें","कोने हरे होने तक स्थिर रखें"],
     scan:"पौधा स्कैन करें",again:"फिर स्कैन करें",load:"फोटो और लाइव मौसम जाँच रहे हैं…",start:"कैमरा चालू हो रहा है…",open:"कैमरा खोलें",choose:"फोटो जोड़ने का तरीका चुनें",
     dark:"बहुत अंधेरा है। रोशनी में जाएँ",bright:"बहुत तेज़ रोशनी है। पौधे पर छाया करें",blur:"फोकस के लिए स्थिर रखें",good:"साफ और अच्छी रोशनी। तैयार",
     cure:"अभी क्या करें",prev:"आगे से बचाव",qual:"स्वस्थ और बेहतर उपज के लिए",live:"खेत की लाइव जाँच",conf:"विश्वास",
     exp:"पक्का नहीं है। कुछ भी छिड़कने से पहले अपने नज़दीकी कृषि विज्ञान केंद्र (KVK) को दिखाएँ।",
-    nocam:"कैमरा उपलब्ध नहीं। गैलरी से फोटो चुनें।",upl:"गैलरी से फोटो चुनें",badimg:"यह फोटो पढ़ी नहीं जा सकी। JPEG या PNG फोटो चुनें।",err:"कुछ गड़बड़ हुई",detected:"पहचानी गई फसल",maybe:"यह भी हो सकती है",print:"रिपोर्ट PDF में सहेजें",hist:"हाल के स्कैन",agent:"एजेंट गतिविधि और सुरक्षा जाँच"}
+    nocam:"कैमरा उपलब्ध नहीं। गैलरी से फोटो चुनें।",upl:"गैलरी से फोटो चुनें",badimg:"यह फोटो पढ़ी नहीं जा सकी। JPEG या PNG फोटो चुनें।",err:"कुछ गड़बड़ हुई",detected:"पहचानी गई फसल",maybe:"यह भी हो सकती है",print:"रिपोर्ट PDF में सहेजें",hist:"हाल के स्कैन",chat:"AgriVision एजेंट से पूछें",ph:"अपनी फसल, छिड़काव, मौसम के बारे में पूछें…",send:"भेजें",used:"एजेंट ने इस्तेमाल किया",think:"एजेंट जाँच रहा है…",chips:["यह किस वजह से होता है?","क्या आज छिड़काव सुरक्षित है?","अगले सीज़न में इससे कैसे बचें?","आप कौन-सी फसलें कवर करते हैं?"],agent:"एजेंट गतिविधि और सुरक्षा जाँच"}
 };
-let lang="en", stream, track, torchOn=false, okFrames=0, busy=false, pos=null;
+let lang="en", stream, track, torchOn=false, busy=false, pos=null;
+let ema={m:null,s:null}, qOk=false, shown="", pend="", pendN=0;
+const toPanel=el=>{ if(matchMedia("(max-width:820px)").matches) el.scrollIntoView({block:"start",behavior:matchMedia("(prefers-reduced-motion:reduce)").matches?"auto":"smooth"}); };
 
 function setLang(l){
   lang=l; const t=T[l]; document.documentElement.lang=l;
   $("en").setAttribute("aria-pressed",l==="en"); $("hi").setAttribute("aria-pressed",l==="hi");
   $("title").textContent=t.title; $("lead").textContent=t.lead; $("tipsT").textContent=t.tipsT;
   $("tips").replaceChildren(...t.tips.map(x=>Object.assign(document.createElement("li"),{textContent:x})));
-  $("snap").textContent=t.scan; $("openCam").textContent=t.open; if(!stream)$("hint").textContent=t.choose; $("uplT").textContent=t.upl; $("retake").textContent=t.again; $("loadT").textContent=t.load;
+  if(shown)$("qtext").textContent=t[shown]; $("chatT").textContent=t.chat; $("chatin").placeholder=t.ph; $("send").textContent=t.send; $("chips").replaceChildren(...t.chips.map(c=>h("button",{className:"chip",textContent:c,onclick:()=>ask(c)}))); $("snap").textContent=t.scan; $("openCam").textContent=t.open; if(!stream)$("hint").textContent=t.choose; $("uplT").textContent=t.upl; $("retake").textContent=t.again; $("loadT").textContent=t.load;
 }
 $("en").onclick=()=>setLang("en"); $("hi").onclick=()=>setLang("hi");
 
@@ -138,7 +163,7 @@ async function startCam(){
     const caps=track.getCapabilities?.()||{};
     try{ if(caps.focusMode?.includes("continuous")) await track.applyConstraints({advanced:[{focusMode:"continuous"}]}); }catch{}
     if(caps.torch) $("torch").hidden=false;
-    $("hint").textContent=""; $("openCam").hidden=true; $("snap").hidden=false; setInterval(analyse,250);
+    $("hint").textContent=""; $("openCam").hidden=true; $("snap").hidden=false; setInterval(analyse,300);
   }catch{ $("hint").textContent=T[lang].nocam; }
 }
 $("torch").onclick=async()=>{torchOn=!torchOn; try{await track.applyConstraints({advanced:[{torch:torchOn}]})}catch{}};
@@ -151,14 +176,20 @@ function analyse(){
   let sum=0; for(let i=0;i<g.length;i++){g[i]=.299*d[i*4]+.587*d[i*4+1]+.114*d[i*4+2]; sum+=g[i];}
   const mean=sum/g.length; let s=0,n=0;
   for(let y=1;y<119;y++)for(let x=1;x<159;x++){const i=y*160+x,l=4*g[i]-g[i-1]-g[i+1]-g[i-160]-g[i+160]; s+=l*l;n++;}
-  const sharp=s/n, t=T[lang];
-  const lightOk=mean>55&&mean<215, sharpOk=sharp>60;
-  const score=Math.min(100,(sharp/120)*70+(lightOk?30:0));
-  const ok=lightOk&&sharpOk;
-  $("meter").classList.toggle("ok",ok); $("view").classList.toggle("ok",ok);
-  $("meter").firstElementChild.style.width=score+"%";
-  $("qtext").textContent= mean<=55?t.dark: mean>=215?t.bright: !sharpOk?t.blur: t.good;
-  $("snap").disabled=!ok;
+  // Smooth readings and add hysteresis so the status does not flicker
+  ema.m = ema.m==null? mean : ema.m*.7+mean*.3;
+  ema.s = ema.s==null? s/n : ema.s*.7+(s/n)*.3;
+  const lightOk = ema.m>55 && ema.m<215, sharpOk = ema.s > (qOk?45:70);
+  qOk = lightOk && sharpOk;
+  $("meter").classList.toggle("ok",qOk); $("view").classList.toggle("ok",qOk);
+  $("meter").firstElementChild.style.width=Math.min(100,(ema.s/120)*70+(lightOk?30:0))+"%";
+  $("snap").disabled=!qOk;
+  // Change the message only after 3 steady readings (about 1 second)
+  const key = ema.m<=55?"dark": ema.m>=215?"bright": !sharpOk?"blur":"good";
+  if(!shown){ shown=key; $("qtext").textContent=T[lang][key]; }
+  else if(key===shown){ pendN=0; }
+  else if(key===pend){ if(++pendN>=3){ shown=key; pendN=0; $("qtext").textContent=T[lang][key]; } }
+  else { pend=key; pendN=1; }
 }
 
 // Capture at max 1280px, JPEG
@@ -183,7 +214,7 @@ $("retake").onclick=()=>{ $("shot").hidden=true; $("retake").hidden=true; busy=f
 async function submit(dataUrl){
   busy=true; $("shot").src=dataUrl; $("shot").hidden=false; $("video").hidden=true;
   $("snap").hidden=true; $("openCam").hidden=true; $("retake").hidden=false; $("empty").hidden=true;
-  $("result").classList.remove("on"); $("loading").classList.add("on");
+  $("result").classList.remove("on"); $("loading").classList.add("on"); toPanel($("loading"));
   try{
     const r=await fetch(API+"/api/diagnose",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({image:dataUrl,lang,...(pos||{})})});
     const j=await r.json(); if(!r.ok) throw new Error(j.error);
@@ -195,7 +226,19 @@ async function submit(dataUrl){
 // Render with textContent only (no HTML injection)
 function h(tag,props={},...kids){const e=Object.assign(document.createElement(tag),props);kids.flat().forEach(k=>e.append(k));return e;}
 function block(cls,title,items){ if(!items?.length) return ""; return h("div",{className:"block "+cls},h("h4",{textContent:title}),h("ul",{},items.map(i=>h("li",{textContent:i})))); }
+let chatMsgs=[], lastScan=null;
+function say(role,text,steps){const d=h("div",{className:"msg "+role},h("div",{textContent:text}));
+  if(steps?.length) d.append(h("div",{className:"small",textContent:T[lang].used+": "+[...new Set(steps.map(s=>s.tool))].join(", ")}));
+  $("chatlog").append(d); $("chatlog").scrollTop=$("chatlog").scrollHeight; return d;}
+async function ask(q){ q=q.trim(); if(!q||$("send").disabled) return; $("chatin").value=""; say("user",q); chatMsgs.push({role:"user",content:q});
+  $("send").disabled=true; const wait=say("bot small",T[lang].think);
+  try{ const r=await fetch(API+"/api/agent",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:chatMsgs,scan:lastScan,lang,...(pos||{})})});
+    const j=await r.json(); if(!r.ok) throw new Error(j.error); wait.remove(); say("bot",j.reply,j.steps); chatMsgs.push({role:"assistant",content:j.reply});
+  }catch(e){ wait.remove(); say("bot",e.message||T[lang].err); chatMsgs.pop(); }
+  $("send").disabled=false; }
+$("send").onclick=()=>ask($("chatin").value); $("chatin").onkeydown=e=>{if(e.key==="Enter")ask($("chatin").value);};
 function render(j){
+  lastScan={crop:j.crop,part:j.part,condition:j.condition,severity:j.severity,confidence:j.confidence,summary:j.summary}; chatMsgs=[]; $("chatlog").replaceChildren();
   const t=T[lang], sev=["mild","moderate","severe"].includes(j.severity)?j.severity:"";
   const out=$("result"); out.replaceChildren(
     h("div",{className:"head"},h("div",{},h("h3",{textContent:j.condition||"—"}),h("div",{className:"small",textContent:`${t.detected}: ${[j.crop,j.part].filter(Boolean).join(", ")} (${+j.crop_confidence||0}%)`+((j.alternatives?.length&&+j.crop_confidence<80)?` · ${t.maybe}: ${j.alternatives.join(", ")}`:"")})),h("span",{className:"sev "+sev,textContent:j.severity||""})),
@@ -210,7 +253,7 @@ function render(j){
       (j.checks||[]).map(c=>h("li",{textContent:(c.ok?"Pass: ":"Check: ")+c.text,style:c.ok?"":"color:var(--alert);font-weight:600"})))):""
   );
   out.append(h("button",{className:"btn",textContent:t.print,onclick:()=>window.print()}));
-  out.classList.add("on"); saveHistory(j);
+  out.classList.add("on"); saveHistory(j); toPanel(out);
 }
 function saveHistory(j){try{const a=JSON.parse(localStorage.getItem("agri_hist")||"[]");a.unshift({d:new Date().toLocaleDateString(),c:j.crop,n:j.condition,s:j.severity});localStorage.setItem("agri_hist",JSON.stringify(a.slice(0,5)));}catch{}}
 function showHistory(){try{const a=JSON.parse(localStorage.getItem("agri_hist")||"[]");if(!a.length)return;$("empty").append(h("div",{className:"small",style:"margin-top:12px"},h("b",{textContent:T[lang].hist}),h("ul",{style:"margin:4px 0 0;padding-left:18px"},a.map(x=>h("li",{textContent:`${x.d}: ${x.c}, ${x.n}`})))));}catch{}}
