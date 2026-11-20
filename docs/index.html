@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="theme-color" content="#10382b">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>AgriVision</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Hind:wght@400;500;600&display=swap" rel="stylesheet">
@@ -13,8 +13,8 @@
 body{margin:0;background:var(--glass);color:var(--ink);font:400 17px/1.55 Hind,system-ui,sans-serif}
 h1,h2,h3{font-family:"Bricolage Grotesque",sans-serif;line-height:1.1;margin:0}
 header{display:flex;justify-content:space-between;align-items:center;padding:18px clamp(16px,4vw,48px)}
-header h1{font-size:1.6rem;color:var(--bottle)}
-.lang button{font:inherit;border:1px solid var(--bottle);background:none;color:var(--bottle);padding:4px 12px;cursor:pointer}
+header h1{font-size:1.6rem;color:var(--head)}
+.lang button{font:inherit;border:1px solid var(--head);background:none;color:var(--head);padding:4px 12px;cursor:pointer}
 .lang button:first-child{border-radius:99px 0 0 99px}.lang button:last-child{border-radius:0 99px 99px 0;border-left:0}
 .lang button[aria-pressed=true]{background:var(--bottle);color:#fff}
 main{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(16px,3vw,40px);padding:0 clamp(16px,4vw,48px) 48px;max-width:1200px;margin:auto}
@@ -36,8 +36,8 @@ button.btn.ghost{background:#ffffff1c;color:#fff}
 button.btn:disabled{opacity:.45;cursor:not-allowed}
 button:focus-visible,label:focus-within{outline:3px solid #fff;outline-offset:2px}
 .auto{color:#cfe3d6;font-size:.9rem;margin-left:auto;display:flex;gap:6px;align-items:center}
-.panel h2{font-size:clamp(1.8rem,4vw,2.6rem);color:var(--bottle)}
-.panel p.lead{color:#37503f;max-width:46ch}
+.panel h2{font-size:clamp(1.8rem,4vw,2.6rem);color:var(--head)}
+.panel p.lead{color:var(--muted);max-width:46ch}
 .empty{border:2px dashed var(--line);border-radius:16px;padding:24px;margin-top:20px}
 .empty ol{margin:8px 0 0;padding-left:20px}
 .loading{display:none;margin-top:20px;font-weight:500}
@@ -49,7 +49,7 @@ button:focus-visible,label:focus-within{outline:3px solid #fff;outline-offset:2p
 .sev{padding:3px 12px;border-radius:99px;font-weight:600;font-size:.9rem;white-space:nowrap;color:#fff;background:var(--leaf)}
 .sev.mild{background:#a67c00}.sev.moderate{background:#c4661b}.sev.severe{background:var(--alert)}
 .conf{height:8px;background:var(--line);border-radius:9px;margin:10px 0 4px}.conf i{display:block;height:100%;background:var(--leaf);border-radius:9px}
-.small{color:#4d6455;font-size:.9rem}
+.small{color:var(--muted);font-size:.9rem}
 .block{border-top:1px solid var(--line);padding:14px 0}
 .block h4{margin:0 0 6px;font:700 1.15rem "Bricolage Grotesque"}
 .block ul{margin:0;padding-left:20px}.block li{margin:4px 0}
@@ -58,16 +58,16 @@ button:focus-visible,label:focus-within{outline:3px solid #fff;outline-offset:2p
 .live{background:#e1ecf2;border-radius:10px;padding:10px 14px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 @media print{#chat,.finder,header,.empty,.btn{display:none!important}main{display:block}}
-.chatbox{margin-top:28px;border-top:2px solid var(--bottle);padding-top:16px}
-.chatbox h3{font-size:1.4rem;color:var(--bottle)}
+.chatbox{margin-top:28px;border-top:2px solid var(--head);padding-top:16px}
+.chatbox h3{font-size:1.4rem;color:var(--head)}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
-.chip{font:500 .9rem Hind;border:1px solid var(--bottle);background:none;color:var(--bottle);border-radius:99px;padding:4px 12px;cursor:pointer}
+.chip{font:500 .9rem Hind;border:1px solid var(--head);background:none;color:var(--head);border-radius:99px;padding:4px 12px;cursor:pointer}
 .chatlog{max-height:340px;overflow:auto;display:flex;flex-direction:column;gap:8px}
 .msg{padding:9px 13px;border-radius:14px;max-width:92%;white-space:pre-wrap}
 .msg.user{align-self:flex-end;background:var(--bottle);color:#fff}
 .msg.bot{align-self:flex-start;background:#fff;border:1px solid var(--line)}
 .chatrow{display:flex;gap:8px;margin-top:10px}
-.chatrow input{flex:1;min-width:0;font:inherit;padding:10px 14px;border:1px solid var(--line);border-radius:99px;background:#fff}
+.chatrow input{flex:1;min-width:0;font:inherit;padding:10px 14px;border:1px solid var(--line);border-radius:99px;background:var(--card);color:inherit}
 html{scrollbar-gutter:stable;-webkit-text-size-adjust:100%}
 body{overflow-wrap:anywhere}
 button,label.btn{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
@@ -80,6 +80,11 @@ button,label.btn{touch-action:manipulation;-webkit-tap-highlight-color:transpare
 .status.bad{background:#fbe9e6;color:#8a2b21;border-left:5px solid var(--alert);cursor:pointer}
 .cropsel{display:flex;gap:8px;align-items:center;color:#e8f3ec;margin-bottom:10px;font-weight:500}
 .cropsel select{flex:1;min-width:0;font:inherit;padding:8px 10px;border-radius:10px;border:0}
+
+:root{--head:var(--bottle);--card:#fff;--muted:#4d6455;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+@media(prefers-color-scheme:dark){:root{--glass:#0d1913;--ink:#e6efe9;--line:#2c4136;--head:#9ad9b2;--card:#14241c;--muted:#a9bfb1}
+.warn{background:#3a1f1b;color:#ffd9d3}.live{background:#1b2a33}.status.wait{background:#3b3000;color:#ffe08a}}
 </style>
 </head>
 <body>
@@ -128,25 +133,152 @@ button,label.btn{touch-action:manipulation;-webkit-tap-highlight-color:transpare
   </section>
 </main>
 
-<script src="config.js"></script>
-<script src="kb.js"></script>
-<script src="engine.js"></script>
+<script>window.AGRI_KB=[{"c": ["rice", "paddy"], "k": ["blast"], "n": "Rice blast", "cure": ["Remove badly infected plants and drain standing water for a few days", "Cut extra nitrogen; if it spreads, use a blast fungicide your KVK recommends, as per label"], "prev": ["Resistant varieties", "Split nitrogen into 3 doses", "Seed treatment"], "q": ["Balanced potassium improves grain filling"], "s": "diamond-shaped grey centred lesions with brown margins"}, {"c": ["rice", "paddy"], "k": ["bacterial", "blight", "blb"], "n": "Bacterial leaf blight", "cure": ["Drain the field and stop nitrogen top-dressing", "Do not spray antibiotics or random chemicals; ask KVK"], "prev": ["Resistant varieties", "Clean seed", "Avoid clipping seedling tips at transplanting"], "q": ["Moderate nitrogen gives sturdier, fuller grains"], "s": "yellow to white wavy streaks drying from the leaf tip and edges"}, {"c": ["rice", "paddy"], "k": ["brown spot"], "n": "Brown spot", "cure": ["Correct nutrition: apply potash and a balanced dose per soil test", "Treat seed before the next sowing; use a KVK-recommended fungicide if severe, as per label"], "prev": ["Healthy seed", "Avoid water stress"], "q": ["Good potassium and silicon reduce spotted, chalky grain"], "s": "small round brown spots with a yellow halo"}, {"c": ["rice", "paddy"], "k": ["sheath blight"], "n": "Sheath blight", "cure": ["Thin dense stands and drain excess water", "Reduce nitrogen; remove infected weeds and stubble"], "prev": ["Wider spacing", "Balanced N"], "q": ["Disease-free tillers give fuller panicles"], "s": "oval greenish grey lesions with brown borders near the stem"}, {"c": ["rice", "paddy"], "k": ["zinc", "khaira", "rusty"], "n": "Zinc deficiency (khaira)", "cure": ["Apply zinc sulphate to soil as per soil-test dose", "Re-check new leaves after 1 to 2 weeks"], "prev": ["Soil test each season", "Zinc in nursery or basal dose"], "q": ["Adequate zinc improves yield and grain zinc content"], "s": "rusty brown spots on pale stunted leaves"}, {"c": ["wheat"], "k": ["yellow rust", "stripe rust", "rust"], "n": "Yellow (stripe) rust", "cure": ["Report early to KVK; a recommended rust fungicide at first stripes works best, as per label", "Avoid extra nitrogen and late irrigation in humid cool spells"], "prev": ["Resistant varieties", "Timely sowing", "Scout from January"], "q": ["Early control protects grain weight and protein"], "s": "yellow powdery stripes running along the leaf"}, {"c": ["wheat"], "k": ["spot blotch", "leaf blight", "blotch"], "n": "Spot blotch", "cure": ["Spray a KVK-recommended fungicide at early symptoms, as per label", "Avoid water stress and heat-stressed late sowing"], "prev": ["Sow on time", "Treat seed", "Rotate crops"], "q": ["Healthy flag leaf drives grain filling"], "s": "oval dark brown blotches with yellow edges"}, {"c": ["maize", "corn"], "k": ["armyworm", "faw", "window"], "n": "Fall armyworm", "cure": ["Scout 20 plants per field; hand-pick egg masses and larvae in the morning", "Put sand or ash into whorls; spray neem-based product early; for heavy attack use an insecticide KVK recommends, as per label"], "prev": ["Early uniform sowing", "Pheromone traps", "Intercrop with pulses"], "q": ["Whorl protection keeps cobs full and clean"], "s": "ragged holes and window-pane feeding with sawdust-like droppings"}, {"c": ["maize", "corn"], "k": ["turcicum", "blight"], "n": "Turcicum leaf blight", "cure": ["Remove and bury crop residue after harvest", "Use a KVK-recommended fungicide if lesions reach upper leaves, as per label"], "prev": ["Tolerant hybrids", "Rotate with non-cereals"], "q": ["Keeping upper leaves green improves grain fill"], "s": "long cigar-shaped grey-green to tan lesions"}, {"c": ["lentil", "masoor", "chickpea", "gram", "chana"], "k": ["wilt"], "n": "Wilt", "cure": ["Pull out and destroy wilted plants; avoid waterlogging", "No spray cures wilt; protect the next crop with seed treatment"], "prev": ["Trichoderma seed treatment", "Resistant varieties", "Rotate for 3 to 4 years"], "q": ["Healthy roots mean more pods per plant"], "s": "drooping yellowing wilted plant with dried leaves"}, {"c": ["chickpea", "gram", "chana", "pigeonpea", "arhar", "tur"], "k": ["pod borer", "helicoverpa"], "n": "Pod borer", "cure": ["Hand-pick larvae; set bird perches and pheromone traps", "Spray neem or NPV early; use an insecticide only if KVK advises, as per label"], "prev": ["Timely sowing", "Intercrop"], "q": ["Borer control keeps seed plump and unholed"], "s": "round bored holes in pods with a caterpillar"}, {"c": ["pigeonpea", "arhar", "tur"], "k": ["sterility", "mosaic"], "n": "Sterility mosaic", "cure": ["Uproot and destroy infected plants early", "Control mites on neighbouring plants as KVK advises"], "prev": ["Resistant varieties", "Remove volunteer arhar"], "q": ["Rogueing early saves pod set in the rest"], "s": "light green mosaic pattern with small bushy leaves"}, {"c": ["mustard", "rapeseed", "sarson", "rai"], "k": ["aphid"], "n": "Mustard aphid", "cure": ["Spray neem oil or soap solution on infested tops in the evening", "Use an insecticide only on KVK advice, as per label"], "prev": ["Sow early", "Yellow sticky traps", "Avoid excess nitrogen"], "q": ["Aphid-free pods improve oil content"], "s": "clusters of tiny aphids on stems and pods with curled leaves"}, {"c": ["mustard", "rapeseed", "sarson", "rai"], "k": ["alternaria"], "n": "Alternaria blight", "cure": ["Remove badly infected leaves", "Fungicide per KVK recommendation, as per label"], "prev": ["Treated seed", "Rotation", "Balanced sulphur"], "q": ["Sulphur improves oil content and quality"], "s": "dark brown spots with concentric rings"}, {"c": ["potato", "aloo"], "k": ["late blight"], "n": "Late blight", "cure": ["Act immediately in cool, humid, cloudy weather: remove infected haulms and spray a protectant or systemic fungicide KVK recommends, as per label", "Avoid overhead irrigation"], "prev": ["Certified seed", "Earthing up", "Resistant varieties"], "q": ["Cut haulms before harvest to avoid tuber rot"], "s": "water-soaked dark brown patches with white mould underneath"}, {"c": ["potato", "tomato", "aloo"], "k": ["early blight"], "n": "Early blight", "cure": ["Pick off and burn lower infected leaves", "Water at the base, mulch, and use a KVK-approved fungicide if spreading, as per label"], "prev": ["Rotate crops", "Stake plants", "Balanced fertiliser"], "q": ["Even watering and potassium improve size and colour"], "s": "brown spots with concentric target rings and yellow halo"}, {"c": ["tomato", "chilli", "okra", "bhindi", "brinjal"], "k": ["leaf curl", "mosaic", "yellow vein", "virus"], "n": "Virus disease (whitefly or thrips spread)", "cure": ["Uproot and destroy infected plants", "Set yellow sticky traps; spray neem; use a KVK-advised insecticide for the insect, as per label"], "prev": ["Net-covered nursery", "Resistant hybrids", "Weed control"], "q": ["Early rogueing protects fruit set in healthy plants"], "s": "curled crinkled yellow leaves with mosaic or yellow veins"}, {"c": ["brinjal", "eggplant", "baingan"], "k": ["borer", "shoot", "fruit borer"], "n": "Shoot and fruit borer", "cure": ["Cut and destroy wilted shoots and bored fruits regularly", "Pheromone traps; neem spray; insecticide only on KVK advice, as per label"], "prev": ["Rotate", "Clean field"], "q": ["Regular removal keeps marketable fruit high"], "s": "wilted shoot tip and fruit with bore holes"}, {"c": ["cabbage", "cauliflower", "gobhi"], "k": ["black rot"], "n": "Black rot", "cure": ["Remove infected plants; avoid overhead irrigation", "Ask KVK about copper-based sprays, as per label"], "prev": ["Hot-water treated seed", "Rotate 2 to 3 years"], "q": ["Clean heads fetch better quality"], "s": "V-shaped yellow lesions from the leaf edge with blackened veins"}, {"c": ["cabbage", "cauliflower", "gobhi"], "k": ["diamondback", "dbm", "caterpillar"], "n": "Diamondback moth", "cure": ["Hand-pick larvae; spray neem or Bt product, as per label", "Rotate insecticide classes only on KVK advice"], "prev": ["Mustard border trap crop", "Pheromone traps"], "q": ["Undamaged leaves mean tighter curds"], "s": "small holes and window feeding with green caterpillars"}, {"c": ["onion", "pyaz"], "k": ["purple blotch"], "n": "Purple blotch", "cure": ["Remove infected leaves; avoid dense planting", "Use a KVK-recommended fungicide, as per label"], "prev": ["Rotate", "Good drainage", "Balanced potash"], "q": ["Healthy foliage means bigger bulbs"], "s": "purple centred whitish sunken spots"}, {"c": ["mango", "aam"], "k": ["anthracnose"], "n": "Anthracnose", "cure": ["Prune and burn infected twigs and fruit", "Avoid spraying blindly in humid spells; use a KVK-advised fungicide at flowering and fruit set, as per label"], "prev": ["Open the canopy", "Clean fallen leaves", "Gentle harvest"], "q": ["Harvest at right maturity; avoid late nitrogen for sweeter, longer-lasting fruit"], "s": "dark sunken black spots on leaves and fruit"}, {"c": ["mango", "aam"], "k": ["powdery mildew"], "n": "Powdery mildew", "cure": ["Spray a sulphur-based or KVK-recommended fungicide at panicle stage, as per label", "Do not spray open flowers in heat without advice"], "prev": ["Prune for airflow", "Scout panicles"], "q": ["Protecting panicles raises fruit set"], "s": "white powdery coating on leaves and flowers"}, {"c": ["litchi", "lychee"], "k": ["crack"], "n": "Fruit cracking", "cure": ["Irrigate lightly and regularly during fruit development; mulch the basin", "Ask KVK about boron or calcium sprays"], "prev": ["Avoid dry spells followed by heavy water", "Windbreaks"], "q": ["Even moisture gives uncracked, juicy fruit"], "s": "split cracked fruit skin"}, {"c": ["litchi", "lychee"], "k": ["borer", "stink", "fruit borer"], "n": "Fruit borer", "cure": ["Collect and destroy fallen fruit; prune and clean the orchard", "Spray only as KVK advises, as per label"], "prev": ["Orchard sanitation", "Timely harvest"], "q": ["Clean fruit keeps colour and shelf life"], "s": "fruit with small bore holes and droppings"}, {"c": ["banana", "kela"], "k": ["panama", "wilt"], "n": "Panama wilt", "cure": ["Remove and destroy infected plants; do not move soil from the plot", "No spray cures it; replant with tissue-culture plants in a clean field"], "prev": ["Tissue-culture suckers", "Drainage", "Rotate"], "q": ["Healthy roots mean bigger bunches"], "s": "yellowing older leaves and split stem base"}, {"c": ["banana", "kela"], "k": ["sigatoka", "leaf spot"], "n": "Sigatoka leaf spot", "cure": ["Cut and remove infected leaves", "Improve drainage; KVK-advised fungicide if severe, as per label"], "prev": ["Spacing", "Balanced potash"], "q": ["More green leaves mean heavier bunches"], "s": "yellow streaks turning into dark brown spots"}, {"c": ["guava", "amrud"], "k": ["wilt"], "n": "Guava wilt", "cure": ["Remove dead trees with roots; avoid waterlogging", "Add compost and ask KVK about soil drenches"], "prev": ["Raised beds", "Avoid root injury"], "q": ["Healthy roots sustain fruiting"], "s": "sudden yellowing wilting branches and dried leaves"}, {"c": ["sugarcane", "ganna"], "k": ["red rot"], "n": "Red rot", "cure": ["Uproot and burn affected clumps; do not use setts from them", "Rotate with non-cane crops"], "prev": ["Resistant varieties", "Disease-free setts", "Hot-water treatment"], "q": ["Clean setts give a higher sugar crop"], "s": "red stalk interior with white cross bands and drying top leaves"}, {"c": ["any"], "k": ["nitrogen", "yellowing", "chlorosis"], "n": "Nitrogen deficiency", "cure": ["Apply urea or compost in a split dose based on soil test", "Light irrigation after applying"], "prev": ["Soil test each season", "Compost or green manure"], "q": ["Balanced N-P-K gives richer fruit and grain than extra nitrogen"], "s": "pale yellow green older leaves and stunted growth"}, {"c": ["any"], "k": ["healthy"], "n": "Healthy", "cure": ["No treatment needed"], "prev": ["Scout weekly", "Regular irrigation and mulching"], "q": ["Harvest at full colour and firmness for taste and nutrition"], "s": "fresh green leaf without spots"}];</script>
 <script>
-const API=(window.AGRI_API||"").replace(/\/+$/,"");
+// AgriVision built-in AI. Runs fully in the browser: no server, no API key, no internet needed.
+// (Live weather is optional and comes straight from Open-Meteo.)
+(() => {
+const KB = window.AGRI_KB || [];
+const CROPS = [["rice","Rice (धान)"],["wheat","Wheat (गेहूं)"],["maize","Maize (मक्का)"],["lentil","Lentil (मसूर)"],["chickpea","Chickpea (चना)"],["pigeonpea","Arhar (अरहर)"],["mustard","Mustard (सरसों)"],["potato","Potato (आलू)"],["tomato","Tomato (टमाटर)"],["brinjal","Brinjal (बैंगन)"],["chilli","Chilli (मिर्च)"],["okra","Okra (भिंडी)"],["cabbage","Cabbage / Cauliflower (गोभी)"],["onion","Onion (प्याज)"],["mango","Mango (आम)"],["litchi","Litchi (लीची)"],["banana","Banana (केला)"],["guava","Guava (अमरूद)"],["sugarcane","Sugarcane (गन्ना)"]];
+const HI = {"धान":"rice","गेहूं":"wheat","गेहूँ":"wheat","मक्का":"maize","मसूर":"lentil","चना":"chickpea","अरहर":"pigeonpea","सरसों":"mustard","आलू":"potato","टमाटर":"tomato","बैंगन":"brinjal","मिर्च":"chilli","भिंडी":"okra","गोभी":"cabbage","प्याज":"onion","आम":"mango","लीची":"litchi","केला":"banana","अमरूद":"guava","गन्ना":"sugarcane"};
+const forCrop = c => KB.filter(e => e.c.includes("any") || (c && e.c.some(x => c.includes(x) || x.includes(c))));
+const matchEntries = (c, re) => forCrop(c).filter(e => re.test(e.n));
+function findCrop(t) {
+  t = String(t || "").toLowerCase();
+  for (const k in HI) if (t.includes(k)) return HI[k];
+  for (const e of KB) for (const a of e.c) if (a !== "any" && a.length > 2 && new RegExp("\\b" + a + "\\b").test(t)) return a;
+  return "";
+}
+
+// ---- live weather (optional, direct from the browser) ----
+async function weather(pos) {
+  if (!pos) return null;
+  try {
+    const j = await (await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.lat}&longitude=${pos.lon}&current=temperature_2m,relative_humidity_2m&daily=precipitation_sum&forecast_days=3`)).json();
+    return { t: j.current.temperature_2m, h: j.current.relative_humidity_2m, rain: (j.daily.precipitation_sum || []).reduce((a, b) => a + b, 0) };
+  } catch { return null; }
+}
+function wxNote(w, lang) {
+  if (!w) return "";
+  const hi = lang === "hi";
+  let n = hi ? `${w.t}°C, नमी ${w.h}%, अगले 3 दिन बारिश ${w.rain.toFixed(0)} मिमी।` : `${w.t}°C, humidity ${w.h}%, rain in the next 3 days ${w.rain.toFixed(0)} mm.`;
+  if (w.rain > 5) n += hi ? " बारिश से पहले छिड़काव न करें।" : " Do not spray before the rain.";
+  else if (w.h > 80) n += hi ? " ज़्यादा नमी में फफूंद बढ़ती है, रोज़ खेत देखें।" : " High humidity favours fungus; check the field daily.";
+  return n;
+}
+
+// ---- image analysis: colour of leaf tissue (green / yellow / brown / white) and brown spot count ----
+function analysePixels(d, W, H) {
+  let g = 0, y = 0, b = 0, wt = 0; const brown = new Uint8Array(W * H);
+  for (let i = 0; i < W * H; i++) {
+    const r = d[i*4]/255, gg = d[i*4+1]/255, bl = d[i*4+2]/255, mx = Math.max(r, gg, bl), mn = Math.min(r, gg, bl), s = mx ? (mx - mn) / mx : 0;
+    let h = 0; if (mx !== mn) { const dl = mx - mn; h = (mx === r ? ((gg - bl) / dl) % 6 : mx === gg ? (bl - r) / dl + 2 : (r - gg) / dl + 4) * 60; if (h < 0) h += 360; }
+    if (s > .2 && mx > .15 && h >= 70 && h <= 170) g++;
+    else if (s > .35 && mx > .4 && h >= 40 && h < 70) y++;
+    else if (s > .25 && mx > .12 && mx < .75 && h >= 8 && h < 40) { b++; brown[i] = 1; }
+    else if (s < .12 && mx > .72) wt++;
+  }
+  let spots = 0; const seen = new Uint8Array(W * H);
+  for (let i = 0; i < W * H; i++) if (brown[i] && !seen[i]) {
+    let n = 0; const st = [i]; seen[i] = 1;
+    while (st.length) { const p = st.pop(); n++; for (const q of [p - 1, p + 1, p - W, p + W]) if (q >= 0 && q < W * H && brown[q] && !seen[q] && Math.abs(q % W - p % W) <= 1) { seen[q] = 1; st.push(q); } }
+    if (n >= 3 && n <= W * H * .04) spots++;
+  }
+  const tissue = g + y + b || 1;
+  return { tissue: (g + y + b) / (W * H), yellow: y / tissue, brown: b / tissue, white: wt / (tissue + wt), spots };
+}
+function classify(m) {
+  if (m.tissue < .12) return "none";
+  if (m.brown > .25) return "severe";
+  if (m.white > .15 && m.brown < .1) return "mildew";
+  if (m.yellow > .2 && m.brown < .1) return "yellow";
+  if (m.brown > .04 || m.spots >= 4) return "spots";
+  return "healthy";
+}
+
+// ---- turn a colour category into advice from the knowledge base ----
+const L = {
+  en: { none: "Plant not clearly visible", healthy: "Looks healthy", yellow: "Yellowing leaves", spots: "Leaf spots or blight", severe: "Severe leaf damage", mildew: "White powdery growth",
+        generic: ["Remove badly affected leaves", "Avoid overhead watering and keep the field clean", "Show the plant to your local KVK before spraying anything"],
+        retake: "I could not see enough leaf or fruit. Move closer, fill the frame with one leaf, and use daylight." },
+  hi: { none: "पौधा साफ़ नहीं दिखा", healthy: "स्वस्थ दिखता है", yellow: "पत्तों का पीलापन", spots: "पत्तों पर धब्बे या झुलसा", severe: "पत्तों को गंभीर नुकसान", mildew: "सफेद चूर्ण जैसी परत",
+        generic: ["बहुत खराब पत्ते हटा दें", "ऊपर से पानी न दें और खेत साफ रखें", "कुछ भी छिड़कने से पहले पौधा अपने KVK को दिखाएँ"],
+        retake: "पत्ता या फल साफ़ नहीं दिखा। पास जाएँ, फ्रेम में एक पत्ता रखें और दिन की रोशनी में लें।" },
+};
+const PICK = { spots: /blast|blight|spot|rust|anthracnose|rot|alternaria|mildew|sigatoka|blotch/i, severe: /blast|blight|spot|rust|anthracnose|rot|alternaria|mildew|sigatoka|blotch/i, mildew: /mildew/i, yellow: /nitrogen|zinc|virus|wilt/i, healthy: /healthy/i };
+const SEV = { none: "", healthy: "none", yellow: "mild", spots: "moderate", mildew: "moderate", severe: "severe" };
+const uniq = a => [...new Set(a)];
+
+function build(m, crop, wx, lang, ms) {
+  const hi = lang === "hi", t = L[lang] || L.en, cat = classify(m), pct = n => Math.round(n * 100);
+  const cands = cat === "none" ? [] : matchEntries(crop, PICK[cat]).slice(0, 4);
+  const label = (CROPS.find(c => c[0] === crop) || [])[1] || "";
+  const cure = cands.length ? cands.map(e => `${e.n}: ${e.cure[0]}`) : cat === "none" || cat === "healthy" ? [] : t.generic;
+  const summary = cat === "none" ? t.retake : (hi
+    ? `आपके फ़ोन पर रंग की त्वरित जाँच: ${pct(m.yellow)}% पीला, ${pct(m.brown)}% भूरा, ${m.spots} धब्बे। यह एक सरल संकेत है, प्रयोगशाला जाँच नहीं।${crop ? "" : " सटीक सलाह के लिए फसल चुनें।"}`
+    : `Quick colour check on your device: ${pct(m.yellow)}% yellow, ${pct(m.brown)}% brown, ${m.spots} spots. This is a simple guide, not a lab test.${crop ? "" : " Choose your crop for specific advice."}`);
+  return {
+    builtin: true, crop: label, part: "leaf", severity: SEV[cat], confidence: cat === "none" ? 15 : cat === "healthy" ? 60 : 45,
+    condition: cands.length && cat !== "healthy" ? `${t[cat]}: ${cands.map(e => e.n).join(", ")}` : t[cat],
+    summary, cure, prevention: uniq(cands.flatMap(e => e.prev)).slice(0, 4), quality_tips: uniq(cands.flatMap(e => e.q)).slice(0, 2),
+    weather_note: wxNote(wx, lang), see_expert: cat !== "healthy",
+    trace: [{ stage: "Built-in: colour analysis", model: "on-device", ms, ok: true }, { stage: "Built-in: knowledge lookup", model: `${cands.length} entries matched`, ms: 0, ok: true }, ...(wx ? [{ stage: "Live weather", model: "open-meteo", ms: 0, ok: true }] : [])],
+    checks: [{ ok: true, text: "Runs on your device, no AI server needed" }, { ok: !!crop, text: crop ? "Advice from your crop's knowledge base entries" : "No crop chosen, advice is general" }, { ok: false, text: "Basic colour method: confirm with your KVK" }],
+  };
+}
+
+const load = src => new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; });
+async function diagnose(dataUrl, crop, pos, lang) {
+  const t0 = performance.now(), img = await load(dataUrl), W = 160, H = Math.max(1, Math.round(W * img.height / img.width));
+  const c = document.createElement("canvas"); c.width = W; c.height = H;
+  const x = c.getContext("2d", { willReadFrequently: true }); x.drawImage(img, 0, 0, W, H);
+  const m = analysePixels(x.getImageData(0, 0, W, H).data, W, H), ms = Math.round(performance.now() - t0);
+  return build(m, crop, await weather(pos), lang, ms);
+}
+
+// ---- built-in agent: picks a tool from the question (knowledge base, weather, latest scan, crop list) ----
+async function agent(messages, scan, pos, lang) {
+  const hi = lang === "hi", q = String(messages[messages.length - 1]?.content || "").toLowerCase(), steps = [], lines = [];
+  const crop = findCrop(q) || findCrop(scan?.crop || ""), kvk = hi ? "किसी भी रसायन से पहले अपने नज़दीकी KVK से पुष्टि करें।" : "Confirm with your local KVK before using any chemical.";
+  const want = { crops: /which crops|cover|कौन|फसलें/, wx: /spray|rain|weather|humid|irrigat|छिड़काव|बारिश|मौसम|सिंचाई/, prev: /prevent|next season|avoid|बचाव|रोक|अगले/, qual: /quality|rich|sweet|yield|healthier|गुणवत्ता|उपज|मीठ|बेहतर/, cause: /cause|why|reason|कारण|क्यों|वजह/ };
+  if (want.crops.test(q)) { steps.push({ tool: "list_crops" }); return { reply: (hi ? "मैं इन फसलों पर सलाह दे सकता हूँ: " : "I can advise on: ") + CROPS.map(c => c[1]).join(", "), steps }; }
+  if (want.wx.test(q)) { steps.push({ tool: "get_weather" }); const w = wxNote(await weather(pos), lang); lines.push(w || (hi ? "स्थान साझा नहीं है, इसलिए मौसम नहीं देख सका। नियम: बारिश से पहले छिड़काव न करें।" : "Location is not shared, so I could not check the weather. As a rule, do not spray before rain.")); }
+  let es = [];
+  if (crop) {
+    const text = q + " " + (scan?.condition || "").toLowerCase();
+    const all = forCrop(crop).filter(e => !e.c.includes("any") || /healthy|nitrogen/i.test(e.n));
+    es = all.filter(e => e.k.some(k => text.includes(k)) || text.includes(e.n.toLowerCase()));
+    if (!es.length) es = all.filter(e => !/healthy/i.test(e.n)).slice(0, 2);
+  }
+  if (es.length) {
+    steps.push({ tool: "search_knowledge" }); if (scan) steps.push({ tool: "get_scan" });
+    const e = es[0], pick = want.prev.test(q) || want.cause.test(q) ? e.prev : want.qual.test(q) ? e.q : e.cure;
+    if (want.cause.test(q)) lines.push(hi ? "आम तौर पर नमी, घनी बुवाई या खराब सफाई से जुड़ा होता है। बचाव के ये कदम इसी ओर इशारा करते हैं:" : "Usually linked to humid weather, dense planting or poor field hygiene. These preventive steps point to the triggers:");
+    lines.push(`${e.n}:`, ...pick.slice(0, 3).map(x => "• " + x));
+  } else if (!lines.length) return { reply: hi ? "फसल का नाम बताइए या पौधे को स्कैन कीजिए, फिर मैं सटीक सलाह दूँगा।" : "Tell me the crop or scan a plant, and I will give specific advice.", steps };
+  lines.push(kvk);
+  return { reply: lines.join("\n"), steps };
+}
+
+window.AgriLocal = { crops: CROPS, diagnose, agent, weather, findCrop, kb: KB, _px: analysePixels, _build: build };
+})();
+
+</script>
+<script>
 const $ = id => document.getElementById(id);
 const T = {
   en:{title:"Point at a leaf or fruit. Get the fix.",lead:"AgriVision checks the photo, today's weather at your field, and trusted farming guidance, then tells you what to do.",tipsT:"For a clear scan",tips:["Fill the frame with one leaf or fruit","Use daylight, avoid harsh shadow","Hold still until the corners turn green"],
-    scan:"Scan plant",again:"Scan again",load:"Reading the photo and checking live weather…",start:"Starting camera…",open:"Open camera",choose:"Choose how to add a photo",
+    scan:"Scan plant",again:"Scan again",load:"Reading your photo and checking the knowledge base. This can take up to a minute.",start:"Starting camera…",open:"Open camera",choose:"Choose how to add a photo",
     dark:"Too dark. Move into light",bright:"Too bright. Shade the plant",blur:"Hold steady to focus",good:"Sharp and well lit. Ready",
     cure:"What to do now",prev:"Prevent it next time",qual:"For healthier, richer produce",live:"Live field check",conf:"Confidence",
     exp:"Low certainty. Show this plant to your local Krishi Vigyan Kendra (KVK) before spraying anything.",
-    nocam:"Camera unavailable. Use Choose from gallery.",upl:"Choose from gallery",badimg:"This image can't be read. Choose a JPEG or PNG photo.",err:"Something went wrong",builtin:"Built-in AI (runs on your device)",selected:"Crop you chose",fallbackShort:"Cloud AI unavailable, used built-in AI",fallback:"Cloud AI is not available, so the built-in AI is being used.",cropT:"Crop (helps the built-in AI)",cropNone:"Not sure",waking:"Connecting to the cloud AI. You can scan now; the built-in AI is used until it is ready.",nokey:"The server has no Groq key. Set GROQ_API_KEY in the server settings.",noapi:"Backend not connected. Set window.AGRI_API in config.js to your server URL, then reload.",unreach:"Cannot reach the server at",retry:"Tap to check again.",detected:"Detected crop",maybe:"Could also be",print:"Save report as PDF",hist:"Recent scans",chat:"Ask the AgriVision agent",ph:"Ask about your crop, spraying, weather…",send:"Send",used:"Agent used",think:"Agent is checking…",chips:["What causes this?","Is it safe to spray today?","How do I prevent it next season?","Which crops do you cover?"],agent:"Agent activity and safety checks"},
+    nocam:"Camera unavailable. Use Choose from gallery.",upl:"Choose from gallery",badimg:"This image can't be read. Choose a JPEG or PNG photo.",err:"Something went wrong",urg:"Urgency",vetted:"Vetted notes",aiTag:"AI suggestion, confirm with KVK",chem:"Chemical options to ask your KVK about (follow the label dose)",chemShort:"Ask KVK",openAI:"Open the online AI scanner",nolink:"Full AI scanning is not available on this page, so only a basic colour check works here.",checking:"Connecting to Claude…",noclaude:"Claude AI is not available here, so the built-in AI is being used.",denied:"Claude was not allowed, so the built-in AI is being used.",label:"Use the product and dose as per label, on KVK advice.",builtin:"Built-in AI (runs on your device)",selected:"Crop you chose",fallbackShort:"Claude unavailable, used built-in AI",cropT:"Crop (optional, improves accuracy)",cropNone:"Not sure",detected:"Detected crop",maybe:"Could also be",print:"Save report as PDF",hist:"Recent scans",chat:"Ask the AgriVision agent",ph:"Ask about your crop, spraying, weather…",send:"Send",used:"Agent used",think:"Agent is checking…",chips:["What causes this?","Is it safe to spray today?","How do I prevent it next season?","Which crops do you cover?"],agent:"Agent activity and safety checks"},
   hi:{title:"पत्ते या फल की ओर कैमरा करें। इलाज पाएँ।",lead:"AgriVision फोटो, आपके खेत का आज का मौसम और भरोसेमंद कृषि सलाह देखकर बताता है कि क्या करना है।",tipsT:"साफ स्कैन के लिए",tips:["फ्रेम में एक पत्ता या फल रखें","दिन की रोशनी में लें, तेज़ छाया से बचें","कोने हरे होने तक स्थिर रखें"],
-    scan:"पौधा स्कैन करें",again:"फिर स्कैन करें",load:"फोटो और लाइव मौसम जाँच रहे हैं…",start:"कैमरा चालू हो रहा है…",open:"कैमरा खोलें",choose:"फोटो जोड़ने का तरीका चुनें",
+    scan:"पौधा स्कैन करें",again:"फिर स्कैन करें",load:"फोटो पढ़ रहे हैं और ज्ञान-भंडार जाँच रहे हैं। एक मिनट तक लग सकता है।",start:"कैमरा चालू हो रहा है…",open:"कैमरा खोलें",choose:"फोटो जोड़ने का तरीका चुनें",
     dark:"बहुत अंधेरा है। रोशनी में जाएँ",bright:"बहुत तेज़ रोशनी है। पौधे पर छाया करें",blur:"फोकस के लिए स्थिर रखें",good:"साफ और अच्छी रोशनी। तैयार",
     cure:"अभी क्या करें",prev:"आगे से बचाव",qual:"स्वस्थ और बेहतर उपज के लिए",live:"खेत की लाइव जाँच",conf:"विश्वास",
     exp:"पक्का नहीं है। कुछ भी छिड़कने से पहले अपने नज़दीकी कृषि विज्ञान केंद्र (KVK) को दिखाएँ।",
-    nocam:"कैमरा उपलब्ध नहीं। गैलरी से फोटो चुनें।",upl:"गैलरी से फोटो चुनें",badimg:"यह फोटो पढ़ी नहीं जा सकी। JPEG या PNG फोटो चुनें।",err:"कुछ गड़बड़ हुई",builtin:"बिल्ट-इन AI (आपके फ़ोन पर चलता है)",selected:"आपकी चुनी फसल",fallbackShort:"क्लाउड AI उपलब्ध नहीं, बिल्ट-इन AI इस्तेमाल हुआ",fallback:"क्लाउड AI उपलब्ध नहीं है, इसलिए बिल्ट-इन AI इस्तेमाल हो रहा है।",cropT:"फसल (बिल्ट-इन AI के लिए)",cropNone:"पक्का नहीं",waking:"क्लाउड AI से जुड़ रहे हैं। आप अभी स्कैन कर सकते हैं; तैयार होने तक बिल्ट-इन AI चलेगा।",nokey:"सर्वर में Groq की कुंजी नहीं है। सर्वर सेटिंग में GROQ_API_KEY डालें।",noapi:"बैकएंड जुड़ा नहीं है। config.js में window.AGRI_API अपने सर्वर के URL पर सेट करें और पेज फिर खोलें।",unreach:"सर्वर तक नहीं पहुँच पाए:",retry:"फिर जाँचने के लिए दबाएँ।",detected:"पहचानी गई फसल",maybe:"यह भी हो सकती है",print:"रिपोर्ट PDF में सहेजें",hist:"हाल के स्कैन",chat:"AgriVision एजेंट से पूछें",ph:"अपनी फसल, छिड़काव, मौसम के बारे में पूछें…",send:"भेजें",used:"एजेंट ने इस्तेमाल किया",think:"एजेंट जाँच रहा है…",chips:["यह किस वजह से होता है?","क्या आज छिड़काव सुरक्षित है?","अगले सीज़न में इससे कैसे बचें?","आप कौन-सी फसलें कवर करते हैं?"],agent:"एजेंट गतिविधि और सुरक्षा जाँच"}
+    nocam:"कैमरा उपलब्ध नहीं। गैलरी से फोटो चुनें।",upl:"गैलरी से फोटो चुनें",badimg:"यह फोटो पढ़ी नहीं जा सकी। JPEG या PNG फोटो चुनें।",err:"कुछ गड़बड़ हुई",urg:"कितना ज़रूरी",vetted:"जाँची हुई सलाह",aiTag:"AI सुझाव, KVK से पुष्टि करें",chem:"रसायन के विकल्प, KVK से पूछें (लेबल की मात्रा ही रखें)",chemShort:"KVK से पूछें",openAI:"ऑनलाइन AI स्कैनर खोलें",nolink:"इस पेज पर पूरा AI स्कैन उपलब्ध नहीं है, यहाँ सिर्फ़ बेसिक रंग जाँच चलती है।",checking:"Claude से जुड़ रहे हैं…",noclaude:"यहाँ Claude AI उपलब्ध नहीं है, इसलिए बिल्ट-इन AI इस्तेमाल हो रहा है।",denied:"Claude को अनुमति नहीं मिली, इसलिए बिल्ट-इन AI इस्तेमाल हो रहा है।",label:"रसायन केवल लेबल के अनुसार, KVK की सलाह पर इस्तेमाल करें।",builtin:"बिल्ट-इन AI (आपके फ़ोन पर चलता है)",selected:"आपकी चुनी फसल",fallbackShort:"क्लाउड AI उपलब्ध नहीं, बिल्ट-इन AI इस्तेमाल हुआ",cropT:"फसल (वैकल्पिक, सटीकता बढ़ाती है)",cropNone:"पक्का नहीं",detected:"पहचानी गई फसल",maybe:"यह भी हो सकती है",print:"रिपोर्ट PDF में सहेजें",hist:"हाल के स्कैन",chat:"AgriVision एजेंट से पूछें",ph:"अपनी फसल, छिड़काव, मौसम के बारे में पूछें…",send:"भेजें",used:"एजेंट ने इस्तेमाल किया",think:"एजेंट जाँच रहा है…",chips:["यह किस वजह से होता है?","क्या आज छिड़काव सुरक्षित है?","अगले सीज़न में इससे कैसे बचें?","आप कौन-सी फसलें कवर करते हैं?"],agent:"एजेंट गतिविधि और सुरक्षा जाँच"}
 };
 let lang="en", stream, track, torchOn=false, busy=false, pos=null;
 let ema={m:null,s:null}, qOk=false, shown="", pend="", pendN=0;
@@ -157,13 +289,12 @@ function setLang(l){
   $("en").setAttribute("aria-pressed",l==="en"); $("hi").setAttribute("aria-pressed",l==="hi");
   $("title").textContent=t.title; $("lead").textContent=t.lead; $("tipsT").textContent=t.tipsT;
   $("tips").replaceChildren(...t.tips.map(x=>Object.assign(document.createElement("li"),{textContent:x})));
-  if(shown)$("qtext").textContent=t[shown]; $("chatT").textContent=t.chat; $("chatin").placeholder=t.ph; $("send").textContent=t.send; $("chips").replaceChildren(...t.chips.map(c=>h("button",{className:"chip",textContent:c,onclick:()=>ask(c)}))); $("cropT").textContent=t.cropT; { const cur=$("cropSel").value; $("cropSel").replaceChildren(h("option",{value:"",textContent:t.cropNone}),...AgriLocal.crops.map(c=>h("option",{value:c[0],textContent:c[1]}))); $("cropSel").value=cur; }
+  if(shown)$("qtext").textContent=t[shown]; $("chatT").textContent=t.chat; $("chatin").placeholder=t.ph; $("send").textContent=t.send; $("chips").replaceChildren(...t.chips.map(c=>h("button",{className:"chip",textContent:c,onclick:()=>ask(c)}))); $("cropT").textContent=t.cropT; { const cur=$("cropSel").value; $("cropSel").replaceChildren(h("option",{value:"",textContent:t.cropNone}),...(window.AgriLocal?AgriLocal.crops:[]).map(c=>h("option",{value:c[0],textContent:c[1]}))); $("cropSel").value=cur; }
   $("snap").textContent=t.scan; $("openCam").textContent=t.open; if(!stream)$("hint").textContent=t.choose; $("uplT").textContent=t.upl; $("retake").textContent=t.again; $("loadT").textContent=t.load;
 }
 $("en").onclick=()=>setLang("en"); $("hi").onclick=()=>setLang("hi");
 
 // Location for live weather (optional)
-navigator.geolocation?.getCurrentPosition(p=>pos={lat:+p.coords.latitude.toFixed(3),lon:+p.coords.longitude.toFixed(3)},()=>{},{timeout:8000});
 
 // Camera
 async function startCam(){
@@ -226,9 +357,10 @@ async function submit(dataUrl){
   busy=true; $("shot").src=dataUrl; $("shot").hidden=false; $("video").hidden=true;
   $("snap").hidden=true; $("openCam").hidden=true; $("retake").hidden=false; $("empty").hidden=true;
   $("result").classList.remove("on"); $("loading").classList.add("on"); toPanel($("loading"));
+  $("loadT").textContent=T[lang].load;
   let j=null, note="";
-  if(cloudOK){ try{ const r=await fetch(API+"/api/diagnose",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({image:dataUrl,lang,...(pos||{})})}); const x=await r.json(); if(!r.ok) throw new Error(x.error); j=x; }catch{ note=T[lang].fallbackShort; } }
-  if(!j){ try{ j=await AgriLocal.diagnose(dataUrl,$("cropSel").value,pos,lang); j.note=note; }catch{ renderError(T[lang].err); } }
+  if(sampleFn){ try{ j=await claudeDiagnose(dataUrl,lang); }catch(e){ note=claudeFail(e); } }
+  if(!j){ try{ j=await AgriLocal.diagnose(dataUrl,$("cropSel").value,pos,lang); j.note=note; }catch(e){ renderError(`${T[lang].err}: ${e&&e.message||e}`); } }
   if(j) render(j);
   $("loading").classList.remove("on");
 }
@@ -242,22 +374,28 @@ function say(role,text,steps){const d=h("div",{className:"msg "+role},h("div",{t
   $("chatlog").append(d); $("chatlog").scrollTop=$("chatlog").scrollHeight; return d;}
 async function ask(q){ q=q.trim(); if(!q||$("send").disabled) return; $("chatin").value=""; say("user",q); chatMsgs.push({role:"user",content:q});
   $("send").disabled=true; const wait=say("bot small",T[lang].think);
-  let j=null;
-  if(cloudOK){ try{ const r=await fetch(API+"/api/agent",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:chatMsgs,scan:lastScan,lang,...(pos||{})})}); const x=await r.json(); if(r.ok) j=x; }catch{} }
-  try{ if(!j) j=await AgriLocal.agent(chatMsgs,lastScan,pos,lang); wait.remove(); say("bot",j.reply,j.steps); chatMsgs.push({role:"assistant",content:j.reply}); }
-  catch{ wait.remove(); say("bot",T[lang].err); chatMsgs.pop(); }
+  let done=false, bub=null;
+  if(sampleFn){
+    try{
+      const {text}=await sampleFn(chatPrompt(),{cache:false,modelTier:"default",onText:({text})=>{ if(!bub){ wait.remove(); bub=say("bot",""); } bub.firstChild.textContent=text; }});
+      const reply=scrubText(text); if(!bub){ wait.remove(); bub=say("bot",""); } bub.firstChild.textContent=reply; chatMsgs.push({role:"assistant",content:reply}); done=true;
+    }catch(e){ if(bub) bub.remove(); claudeFail(e); }
+  }
+  if(!done){ try{ const j=await AgriLocal.agent(chatMsgs,lastScan,pos,lang); wait.remove(); say("bot",j.reply,j.steps); chatMsgs.push({role:"assistant",content:j.reply}); }catch(e){ wait.remove(); say("bot",`${T[lang].err}: ${e&&e.message||e}`); chatMsgs.pop(); } }
   $("send").disabled=false; }
 $("send").onclick=()=>ask($("chatin").value); $("chatin").onkeydown=e=>{if(e.key==="Enter")ask($("chatin").value);};
+const issueBlock=(i,t)=>h("div",{className:"block"},h("h4",{textContent:`${i.name}${i.severity?" · "+i.severity:""}`}),h("div",{className:"small",textContent:[i.type,i.source==="knowledge base"?t.vetted:t.aiTag,`${+i.confidence||0}%`].filter(Boolean).join(" · ")}),
+  h("ul",{},[...(i.cure||[]),...(i.chemical||[]).map(x=>`${t.chemShort}: ${x}`)].map(x=>h("li",{textContent:x}))));
 function render(j){
   lastScan={crop:j.crop,part:j.part,condition:j.condition,severity:j.severity,confidence:j.confidence,summary:j.summary}; chatMsgs=[]; $("chatlog").replaceChildren();
   const t=T[lang], sev=["mild","moderate","severe"].includes(j.severity)?j.severity:"";
   const out=$("result"); out.replaceChildren(
     h("div",{className:"head"},h("div",{},h("h3",{textContent:j.condition||"—"}),h("div",{className:"small",textContent:(j.builtin?`${t.builtin}${j.crop?` · ${t.selected}: ${j.crop}`:""}${j.note?` · ${j.note}`:""}`:`${t.detected}: ${[j.crop,j.part].filter(Boolean).join(", ")} (${+j.crop_confidence||0}%)`)+((j.alternatives?.length&&+j.crop_confidence<80)?` · ${t.maybe}: ${j.alternatives.join(", ")}`:"")})),h("span",{className:"sev "+sev,textContent:j.severity||""})),
     h("div",{className:"conf"},h("i",{style:`width:${+j.confidence||0}%`})),
-    h("div",{className:"small",textContent:`${t.conf}: ${+j.confidence||0}%`}),
+    h("div",{className:"small",textContent:`${t.conf}: ${+j.confidence||0}%${j.urgency?` · ${t.urg}: ${j.urgency}`:""}${j.source?` · ${j.source==="knowledge base"?t.vetted:t.aiTag}`:""}`}),
     h("p",{textContent:j.summary||""}),
     j.see_expert||(+j.confidence<60)? h("div",{className:"warn",textContent:t.exp}):"",
-    block("cure",t.cure,j.cure), block("",t.prev,j.prevention), block("",t.qual,j.quality_tips),
+    block("cure",t.cure,j.cure), block("",t.chem,j.chemical), ...(j.extra||[]).map(i=>issueBlock(i,t)), block("",t.prev,j.prevention), block("",t.qual,j.quality_tips),
     j.weather_note? h("div",{className:"block"},h("div",{className:"live"},h("b",{textContent:t.live+": "}),j.weather_note)):"",
     j.trace?.length? h("details",{className:"block"},h("summary",{textContent:t.agent,style:"cursor:pointer;font-weight:600"}),
       h("ul",{},j.trace.map(x=>h("li",{textContent:`${x.stage}: ${String(x.model).split("/").pop()}${x.ms?`, ${x.ms} ms`:""}${x.tokens?`, ${x.tokens} tokens`:""}${x.ok?"":" (failed)"}`})),
@@ -270,24 +408,58 @@ function saveHistory(j){try{const a=JSON.parse(localStorage.getItem("agri_hist")
 function showHistory(){try{const a=JSON.parse(localStorage.getItem("agri_hist")||"[]");if(!a.length)return;$("empty").append(h("div",{className:"small",style:"margin-top:12px"},h("b",{textContent:T[lang].hist}),h("ul",{style:"margin:4px 0 0;padding-left:18px"},a.map(x=>h("li",{textContent:`${x.d}: ${x.c}, ${x.n}`})))));}catch{}}
 function renderError(m){ $("result").replaceChildren(h("div",{className:"warn",textContent:m})); $("result").classList.add("on"); }
 
-let cloudOK=false, checking=false;
-async function checkServer(){
-  if(checking) return; checking=true; cloudOK=false;
-  const s=$("status"), show=x=>{s.hidden=false;s.className="status wait";s.textContent=x;}, fail=m=>show(`${T[lang].fallback} (${m}) ${T[lang].retry}`);
-  try{
-    if(!API&&location.hostname.endsWith("github.io")) return fail(T[lang].noapi);
-    show(T[lang].waking);
-    const ctl=new AbortController(), to=setTimeout(()=>ctl.abort(),70000);
-    const h=await (await fetch(API+"/api/health",{signal:ctl.signal})).json(); clearTimeout(to);
-    if(!h.key_set) return fail(T[lang].nokey);
-    const t=await (await fetch(API+"/api/selftest")).json(), bad=(t.checks||[]).find(c=>!c.ok);
-    if(bad) return fail(bad.error);
-    cloudOK=true; s.hidden=true;
-  }catch{ fail(T[lang].unreach+" "+(API||location.origin)); }
-  finally{ checking=false; }
+// ---- Claude, the AI assistant, through the page's "sample" capability: no API key and no server ----
+let sampleFn=null;
+const DOSE=/\b\d+(\.\d+)?\s?(mg|ml|g|gm|kg|l|litre|liter|ppm|%)(\s?\/\s?(l|ha|acre|litre|liter))?/i;
+const scrubText=t=>String(t).split("\n").map(l=>DOSE.test(l)?T[lang].label:l).join("\n");
+const langName=l=>l==="hi"?"Hindi":"English";
+const kbText=()=>JSON.stringify(AgriLocal.kb.map(e=>({crops:e.c.filter(x=>x!=="any").slice(0,3),problem:e.n,cure:e.cure,prevention:e.prev,quality:e.q})));
+const AI_URL="https://claude.ai/artifact/6D79JhCZkb1W4Smo7uz43K";
+function banner(msg,link){ const b=$("status"); b.hidden=!msg; b.className="status wait"; b.replaceChildren(msg||"");
+  if(msg&&link) b.append(" ",h("a",{href:AI_URL,target:"_blank",rel:"noopener",textContent:T[lang].openAI,style:"color:inherit;font-weight:700"})); }
+async function initClaude(){
+  if(!window.claude||!window.claude.use){ banner(T[lang].nolink,true); return; }   // e.g. GitHub Pages: only the basic check works here
+  banner(T[lang].checking);
+  try{ const c=await window.claude.use("sample"), lim=c&&c.limits?await c.limits():null; if(c&&lim&&lim.images){ sampleFn=c; banner(""); return; } }catch{}
+  banner(T[lang].noclaude);
 }
-$("status").onclick=checkServer;
-checkServer(); // also wakes a sleeping free-tier server
+function claudeFail(e){ if(e&&e.code==="not_granted"){ sampleFn=null; banner(T[lang].denied); } return T[lang].fallbackShort; }
+function dataUrlToBlob(u){ const [h,b]=u.split(","), bin=atob(b), a=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++)a[i]=bin.charCodeAt(i); return new Blob([a],{type:(h.match(/:(.*?);/)||[])[1]||"image/jpeg"}); }
+async function claudeDiagnose(dataUrl,lg){
+  const t0=Date.now();
+  const prompt=`You are AgriVision, an expert plant doctor (agronomist, plant pathologist and entomologist) helping farmers in Bihar and Jharkhand, India. Study the attached photo carefully.
+1. Identify the crop and plant part. Likely crops here: rice, wheat, maize, lentil, chickpea, pigeonpea (arhar), mustard, potato, tomato, brinjal, chilli, okra, cabbage, cauliflower, onion, mango, litchi, banana, guava, sugarcane, jute, vegetables and pulses; any other crop is possible, name it anyway.
+2. Find EVERY problem you can see, not only the main one: diseases (fungal, bacterial, viral), insect and mite pests, nutrient deficiencies or toxicities, water or heat stress, weeds, physiological disorders, and spray or weather damage. Look at leaf, stem, fruit and flower signs. If the plant looks healthy, say so. Rank the problems by importance.
+3. For each problem give practical cures and remedies for a farmer in India. Start with cultural and organic steps (what to remove, water, nutrition, spacing, neem or biological options). Then list chemical options only as active-ingredient names that are registered in India for that crop, never doses and never brand names; the farmer must follow the label dose and ask the KVK. Add prevention for next season.
+4. VETTED KNOWLEDGE below is from KVK-reviewed notes. When a problem matches an entry, use its steps and set source to "knowledge base". For everything else use your own agronomic knowledge and set source to "AI knowledge".
+5. Be honest: give a confidence for each problem. Set see_expert true if you are unsure, the damage is severe, or you cannot tell. If the image is not a plant or is unclear, say so in summary and use confidence under 30.
+VETTED KNOWLEDGE (JSON): ${kbText()}
+Reply with ONLY this JSON: {"crop":"","crop_confidence":0-100,"alternatives":[],"part":"","summary":"2-3 plain sentences","urgency":"act today | this week | keep watching | none","issues":[{"name":"","type":"disease|pest|nutrient|water stress|weed|disorder|healthy","severity":"none|mild|moderate|severe","confidence":0-100,"cure":[],"chemical":[],"prevention":[],"source":"knowledge base|AI knowledge"}],"quality_tips":[],"see_expert":true}
+Write every text value in ${langName(lg)}.`;
+  const j=await sampleFn.json(prompt,{images:[dataUrlToBlob(dataUrl)],modelTier:"default",cache:false});
+  return finish(j,Date.now()-t0);
+}
+function finish(j,ms){   // safety checks on Claude's answer before the farmer sees it
+  const arr=x=>Array.isArray(x)?x.map(String):[]; let stripped=0;
+  const clean=a=>arr(a).map(x=>DOSE.test(x)?(stripped++,T[lang].label):x);
+  const issues=(Array.isArray(j.issues)?j.issues:[]).filter(i=>i&&i.name).map(i=>({name:String(i.name),type:String(i.type||""),severity:String(i.severity||""),confidence:+i.confidence||0,cure:clean(i.cure),chemical:clean(i.chemical),prevention:clean(i.prevention),source:i.source==="knowledge base"?"knowledge base":"AI knowledge"}));
+  if(!issues.length) throw new Error("no diagnosis");
+  const top=issues[0], c=top.confidence, kb=issues.filter(i=>i.source==="knowledge base").length, known=!!AgriLocal.findCrop(String(j.crop||""));
+  Object.assign(j,{issues,extra:issues.slice(1),condition:top.name,severity:top.severity,confidence:c,cure:top.cure,chemical:top.chemical,prevention:top.prevention,source:top.source,quality_tips:clean(j.quality_tips)});
+  j.checks=[{ok:known,text:known?"Crop is in the Bihar and Jharkhand knowledge base":"Crop is outside the knowledge base: advice is from AI knowledge"},{ok:kb>0,text:kb?`${kb} of ${issues.length} problem(s) match the vetted knowledge base`:"No problem matched the vetted knowledge base: confirm with your KVK"},{ok:!stripped,text:stripped?`Replaced ${stripped} unverified dose(s) with label advice`:"No unverified chemical doses"},{ok:issues.every(i=>i.confidence>=60),text:`Confidence ${issues.map(i=>i.confidence+"%").join(", ")}`}];
+  j.trace=[{stage:"Claude: read photo, notes and agronomy knowledge",model:"Claude",ms,ok:true},{stage:"Verify: safety checks",model:`${j.checks.filter(x=>x.ok).length}/${j.checks.length} passed`,ms:0,ok:true}];
+  j.see_expert=!!j.see_expert||issues.some(i=>i.confidence<60||i.severity==="severe")||stripped>0; return j;
+}
+function chatPrompt(){
+  const talk=chatMsgs.slice(-10).map(m=>(m.role==="user"?"Farmer: ":"AgriVision: ")+m.content).join("\n");
+  return `You are the AgriVision assistant, a friendly expert plant doctor for farmers in Bihar and Jharkhand, India. Answer any farming question about crop diseases, pests, nutrients, water, soil, spraying timing and harvest quality. Use the VETTED KNOWLEDGE first when it matches, and your own agronomic knowledge otherwise, saying "AI suggestion, confirm with your KVK" for anything outside the vetted notes. Give cultural and organic steps first. Name chemicals only as active ingredients registered in India, never doses or brands: say "follow the label dose and ask your KVK". If unsure, send the farmer to the local KVK. You cannot see the weather. Keep the answer to at most 8 short lines. Reply in ${langName(lang)}.
+LATEST SCAN: ${JSON.stringify(lastScan)}
+VETTED KNOWLEDGE (JSON): ${kbText()}
+CONVERSATION:
+${talk}
+AgriVision:`;
+}
+initClaude();
 $("openCam").onclick=startCam;
 setLang("en"); showHistory();
 </script>
