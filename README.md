@@ -3,7 +3,7 @@
 **Take a photo of a leaf, fruit or plant. AgriVision identifies the crop, detects the problem, and tells the farmer what to do about it.**
 Built for farmers in Bihar and Jharkhand. Works in English and Hindi.
 
-Live demo (Claude-powered): https://claude.ai/artifact/6D79JhCZkb1W4Smo7uz43K
+Live demo (Claude-powered): https://agrivisionapi.onrender.com/
 
 ---
 
